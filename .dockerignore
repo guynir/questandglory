@@ -1,0 +1,11 @@
+webapp/node_modules
+webapp/.next
+**/.gitignore
+/build
+/.gradle
+/.idea
+/.gitignore
+/.gitattributes
+/.env
+/*.md
+Dockerfile

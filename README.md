@@ -1,2 +1,3 @@
-# questandglory
-A AI-based game.
+# Quest & Glory
+
+An AI-based game.

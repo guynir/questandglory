@@ -1,0 +1,25 @@
+(* Common definitions *)
+string = ::= '"' [0-9_-a-zA-Z]* '"'
+expression ::= identifier | number | string | expression '+' expression
+identifier ::= [a-zA-Z_][a-zA-Z0-9_]*
+number ::= [-+][0-9]+
+
+(* Program definition *)
+program ::= statement*
+statement = messageStatement | gotoStatement | labelStatement | defineVariable | functionCall
+
+(* Output message statement *)
+messageStatement ::= 'message' expression ';' $\;
+
+(* Label and GOTO definitions *)
+label ::= [a-zA-Z_][a-zA-Z0-9_]{1,63}
+labelStatement ::= label ':'
+gotoStatement ::= 'goto' label ';'
+
+(* New variable definition *)
+defineVariable ::= 'var' identifier 'as' integer | string | boolean
+
+(* Function call definition *)
+functionName :: = [a-zA-Z_][a-zA-Z0-9_]*
+functionArgument :: = expression
+functionCall ::= 'let' identifier ' = 'functionName' '(' functionArgument* ')' ;'
