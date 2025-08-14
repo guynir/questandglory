@@ -1,6 +1,7 @@
 package com.questandglory.engine.conditions;
 
-import com.questandglory.engine.EngineExecutionContext;
+import com.questandglory.engine.EngineFacade;
+import com.questandglory.engine.expressions.Expression;
 
 import java.util.Objects;
 
@@ -15,9 +16,9 @@ public class EqualsCondition implements Condition {
     }
 
     @Override
-    public boolean evaluate(EngineExecutionContext context) {
-        Object leftValue = leftExpression.getValue(context);
-        Object rightValue = rightExpression.getValue(context);
+    public boolean evaluate(EngineFacade context) {
+        Object leftValue = leftExpression.evaluate(context);
+        Object rightValue = rightExpression.evaluate(context);
 
         return Objects.equals(leftValue, rightValue); // Both are null, considered equal
     }

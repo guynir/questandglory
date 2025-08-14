@@ -12,21 +12,11 @@ import dev.langchain4j.model.chat.response.ChatResponse;
 import java.util.List;
 import java.util.Map;
 
-import static dev.langchain4j.data.message.UserMessage.userMessage;
-
 public class ScriptParser {
 
     private final ChatModel model;
     private final String ebnfDefinition;
     private final ObjectMapper objectMapper = new ObjectMapper();
-
-    public record LineErrors(int lineNumber, String message) {
-    }
-
-    public record ScriptParseResult(String contents,
-                                    List<Map<String, Object>> parsedScript,
-                                    List<LineErrors> errors) {
-    }
 
     public ScriptParser(ChatModel model, String ebnfDefinition) {
         this.model = model;
@@ -54,7 +44,7 @@ public class ScriptParser {
                 Do not try to correct the input code.
                 Include a section that list all errors, where each error contains a line number and an error message.
                 Do not add semicolumn at the end of each line.
-
+                
                 Here is the code:
                 %s
                 """.formatted(ebnfDefinition, program);
@@ -87,5 +77,13 @@ public class ScriptParser {
         }).toList();
 
         return new ScriptParseResult(response.aiMessage().text(), parsedScript, lineErrors);
+    }
+
+    public record LineErrors(int lineNumber, String message) {
+    }
+
+    public record ScriptParseResult(String contents,
+                                    List<Map<String, Object>> parsedScript,
+                                    List<LineErrors> errors) {
     }
 }

@@ -1,5 +1,7 @@
 plugins {
 	java
+    antlr
+    idea
 	id("org.springframework.boot") version "3.5.3"
 	id("io.spring.dependency-management") version "1.1.7"
 }
@@ -32,6 +34,7 @@ dependencies {
 //	implementation("org.springframework.ai:spring-ai-starter-model-openai")
 //	implementation("org.springframework.modulith:spring-modulith-starter-core")
 	compileOnly("org.projectlombok:lombok")
+    testCompileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	annotationProcessor("org.projectlombok:lombok")
@@ -45,9 +48,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("ognl:ognl:3.4.7")
     implementation("org.springframework.boot:spring-boot-starter-freemarker")
-
-
-
+    antlr("org.antlr:antlr4:4.13.2")
+    implementation("org.antlr:antlr4-runtime:4.13.2")
 }
 
 dependencyManagement {
@@ -59,4 +61,18 @@ dependencyManagement {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks.generateGrammarSource {
+    outputDirectory = file("${project.buildDir}/generated/sources/main/kotlin/antlr")
+    arguments = listOf("-package", "com.questandglory.parser.antlr", "-visitor")
+}
+
+
+sourceSets {
+    main {
+        java {
+            srcDir(tasks.generateGrammarSource)
+        }
+    }
 }

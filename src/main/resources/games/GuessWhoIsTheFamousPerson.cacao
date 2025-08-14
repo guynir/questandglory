@@ -1,0 +1,49 @@
+// Introduction.
+Message("Welcome to the guessing game!");
+Message("");
+Message("This is an AI-based game where you will guess the name of a famous person.");
+Message("You can answer or write free-style. The game will understand your input and respond accordingly.");
+Message("You can even answer in your native language (e.g.: נעים להכיר - שמי הוא ג'ון), but the AI will respond in English.");
+
+Message("What is your name ?");
+Message("(you can provide your name directly or answer as a human being would do, e.g.: \"My name is John\")");
+Message("You can even answer in your native language (e.g.: נעים להכיר - שמי הוא ג'ון), but the AI will respond in English.");
+
+var name : String = "__NONAME__";
+var prompt: String;
+var firstName: String = "__NONAME__";
+
+While firstName == "__NONAME__" Do
+    name = Input();
+
+    prompt = "Given the following user input: " + name + ", if it contains a user's first name - return the first name only. No further information. If input does not contain any name, return the string '__NONAME__' only.";
+    firstName = Ask(prompt);
+
+    If firstName == "__NONAME__" Then
+        Message("Could not understand your name. Let's try again.");
+    End If
+
+End While
+
+firstName = TRANSLATE("English", firstName);
+
+Message("");
+Message("Welcome to the game ${firstName}!");
+Message("");
+Message("The game is simple: You need to guess the name of a famous person. You cannot ask for his or her name directly, but you can ask questions about the person.");
+setSystemMessage("chat", "You are playing a game with a user, where the user has to guess the name of a famous person - George Washington. You are not allowed to reveal the name of the person directly. Instead, you can answer user's questions about the person and provide clues - if the user request so. Your response should be one of the following: - either '__YES__' if the user guessed the name of the person or a descent response in any other case.");
+
+var userAnswer: String;
+var aiResponse: String;
+
+While aiResponse != "__YES__" Do
+    userAnswer = Input();
+    aiResponse = Ask("chat", userAnswer);
+    if aiResponse != "__YES__" Then
+        Message(aiResponse);
+    End If
+End While
+
+If aiResponse == "__YES__" Then
+    Message("YES ! You guessed it right !!!!");
+End If

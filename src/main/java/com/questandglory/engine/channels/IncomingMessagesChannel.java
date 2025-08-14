@@ -12,16 +12,15 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class IncomingMessagesChannel implements MailboxOwner {
 
-    private final Map<String, Mailbox> mailboxMap = new ConcurrentHashMap<>();
-
     private static final Logger logger = LoggerFactory.getLogger(IncomingMessagesChannel.class);
+    private final Map<String, Mailbox> mailboxMap = new ConcurrentHashMap<>();
 
     public IncomingMessagesChannel() {
     }
 
     public Mailbox createMailbox() {
-        Mailbox mailbox = null;
-        Mailbox existingMailbox = null;
+        Mailbox mailbox;
+        Mailbox existingMailbox;
         do {
             String mailboxId = GlobalIdGenerator.generateId();
             mailbox = new Mailbox(mailboxId, this);

@@ -2,7 +2,6 @@ package com.questandglory.services;
 
 import com.questandglory.utils.SecureRandomIdGenerator;
 import com.questandglory.utils.StringIdGenerator;
-import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatModel;
@@ -18,21 +17,18 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O;
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 
 @Service
 public class ChatServiceImpl implements ChatService {
 
-    @Value("${OPENAI_API_KEY}")
-    private String OPENAI_API_KEY;
-
+    private static final int MAX_MESSAGES = 1000;
     private final StringIdGenerator idGenerator = new SecureRandomIdGenerator();
 
     private final ChatMemoryStore chatStore = new InMemoryChatMemoryStore();
 
     public ChatModel model;
-
-    private static final int MAX_MESSAGES = 1000;
+    @Value("${OPENAI_API_KEY}")
+    private String OPENAI_API_KEY;
 
     @PostConstruct
     public void setup() {
@@ -52,7 +48,7 @@ public class ChatServiceImpl implements ChatService {
                 .maxMessages(MAX_MESSAGES)
                 .build();
 
-        return new ChatHandler<T>(chatId, model, chatMemory, deserializer);
+        return new ChatHandler<>(chatId, model, chatMemory, deserializer);
     }
 
     @Override
@@ -96,5 +92,9 @@ public class ChatServiceImpl implements ChatService {
                 """, ebnfContent);
         return new ScriptParser(model, ebnfContent);
 
+    }
+
+    public void setOpenAPIKey(String openAPIKey) {
+        this.OPENAI_API_KEY = openAPIKey;
     }
 }

@@ -18,20 +18,9 @@ import static dev.langchain4j.data.message.UserMessage.userMessage;
 public class MessageTranslator {
 
     /**
-     * A record to represent a translation key, which consists of a message and a target language. Used to quickly
-     * lookup translations in memory cache.
-     *
-     * @param message        Original message to be translated.
-     * @param targetLanguage Target language for the translation.
-     */
-    private record TranslationKey(String message, String targetLanguage) {
-    }
-
-    /**
      * Chat model to use for translations.
      */
     private final ChatModel model;
-
     /**
      * In-memory cache of translations, mapping TranslationKey to the translated message.
      */
@@ -68,5 +57,15 @@ public class MessageTranslator {
             translations.put(key, translatedMessage);
         }
         return translatedMessage;
+    }
+
+    /**
+     * A record to represent a translation key, which consists of a message and a target language. Used to quickly
+     * lookup translations in memory cache.
+     *
+     * @param message        Original message to be translated.
+     * @param targetLanguage Target language for the translation.
+     */
+    private record TranslationKey(String message, String targetLanguage) {
     }
 }

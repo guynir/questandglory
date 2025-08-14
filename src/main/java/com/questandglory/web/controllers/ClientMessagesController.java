@@ -13,9 +13,8 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class ClientMessagesController {
 
-    private final ChannelFactory channelFactory;
-
     private static final Logger logger = LoggerFactory.getLogger(ClientMessagesController.class);
+    private final ChannelFactory channelFactory;
 
     public ClientMessagesController(ChannelFactory channelFactory) {
         this.channelFactory = channelFactory;
@@ -39,9 +38,10 @@ public class ClientMessagesController {
     @MessageMapping("/queue/{instanceId}/{mailboxId}")
     public void send2(ClientMessage message, @DestinationVariable String instanceId, @DestinationVariable String mailboxId) {
         TextInputMessage inputMessage = (TextInputMessage) message;
-        logger.info("Incoming message: instanceId={}, mailboxId={}.", instanceId, mailboxId);
+        logger.info("Incoming message for queue: instanceId={}, mailboxId={}.", instanceId, mailboxId);
 
         Channels channels = channelFactory.findChannels(instanceId);
         channels.incomingMessagesChannel.postMessage(mailboxId, inputMessage);
     }
+
 }
