@@ -12,8 +12,6 @@ import dev.langchain4j.model.chat.response.ChatResponse;
 import java.util.List;
 import java.util.Map;
 
-import static dev.langchain4j.data.message.UserMessage.userMessage;
-
 public class ScriptParser {
 
     private final ChatModel model;

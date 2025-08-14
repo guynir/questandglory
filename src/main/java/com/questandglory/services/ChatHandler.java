@@ -94,6 +94,4 @@ public class ChatHandler<R> {
 
         return deserializer.deserialize(answer.text());
     }
-
-
 }

@@ -14,17 +14,15 @@ RUN npm ci
 COPY webapp/ ./
 RUN npm run build
 
-FROM ubuntu:jammy
+FROM eclipse-temurin:21-jre-jammy
 
 RUN apt-get -y update && \
     apt-get -y upgrade && \
     apt-get install -y curl wget gnupg apt-transport-https ca-certificates software-properties-common && \
     rm -rf /var/lib/apt/lists/* && \
     curl -sL https://deb.nodesource.com/setup_24.x | bash - && \
-    mkdir -p /etc/apt/keyrings && wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | tee /etc/apt/keyrings/adoptium.asc && \
-    echo "deb [signed-by=/etc/apt/keyrings/adoptium.asc] https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print $2}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list && \
     apt-get -y update && \
-    apt-get -y install temurin-21-jdk nodejs nginx
+    apt-get -y install nodejs nginx
 
 COPY ./relang/docker/nginx-prod/default.conf /etc/nginx/sites-available/default
 

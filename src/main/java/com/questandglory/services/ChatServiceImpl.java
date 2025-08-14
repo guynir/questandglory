@@ -2,7 +2,6 @@ package com.questandglory.services;
 
 import com.questandglory.utils.SecureRandomIdGenerator;
 import com.questandglory.utils.StringIdGenerator;
-import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatModel;
@@ -18,7 +17,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O;
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 
 @Service
 public class ChatServiceImpl implements ChatService {
@@ -96,5 +94,9 @@ public class ChatServiceImpl implements ChatService {
                 """, ebnfContent);
         return new ScriptParser(model, ebnfContent);
 
+    }
+
+    public void setOpenAPIKey(String openAPIKey) {
+        this.OPENAI_API_KEY = openAPIKey;
     }
 }
