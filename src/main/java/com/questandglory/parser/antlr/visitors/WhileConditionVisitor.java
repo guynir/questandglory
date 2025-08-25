@@ -13,6 +13,6 @@ public class WhileConditionVisitor extends AbstractLanguageVisitor<WhileConditio
         BooleanExpression condition = factory.booleanExpression(ctx.booleanExpression());
         Statement statement = factory.statements(ctx.statements());
 
-        return new WhileConditionStatement(Location.parse(ctx), condition, statement);
+        return new WhileConditionStatement(Location.from(ctx), condition, statement);
     }
 }

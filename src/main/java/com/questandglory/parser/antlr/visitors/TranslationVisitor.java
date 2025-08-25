@@ -16,6 +16,14 @@ public class TranslationVisitor extends AbstractLanguageVisitor<TranslateStateme
 
     private final Set<String> SUPPRTED_LANGUAGES = createLanguageSet();
 
+    private static Set<String> createLanguageSet() {
+        return Arrays
+                .stream(Locale.getAvailableLocales())
+                .map(Locale::getDisplayLanguage)
+                .map(String::toLowerCase)
+                .collect(Collectors.toSet());
+    }
+
     @Override
     public TranslateStatement visitStringLiteral(LanguageParser.StringLiteralContext ctx) {
         return super.visitStringLiteral(ctx);
@@ -29,19 +37,11 @@ public class TranslationVisitor extends AbstractLanguageVisitor<TranslateStateme
         StringExpression text = factory.stringExpression(ctx.string);
 
         if (!SUPPRTED_LANGUAGES.contains(language.toLowerCase())) {
-            throw new CompilationException("Unsupported language for translation: " + language, Location.parse(ctx.targetLanguage));
+            throw new CompilationException("Unsupported language for translation: " + language, Location.from(ctx.targetLanguage));
         }
 
         Locale locale = Locale.forLanguageTag(language);
 
-        return new TranslateStatement(Location.parse(ctx), targetVariable, locale, text);
-    }
-
-    private static Set<String> createLanguageSet() {
-        return Arrays
-                .stream(Locale.getAvailableLocales())
-                .map(Locale::getDisplayLanguage)
-                .map(String::toLowerCase)
-                .collect(Collectors.toSet());
+        return new TranslateStatement(Location.from(ctx), targetVariable, locale, text);
     }
 }

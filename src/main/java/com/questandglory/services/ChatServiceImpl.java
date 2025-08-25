@@ -21,16 +21,14 @@ import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O;
 @Service
 public class ChatServiceImpl implements ChatService {
 
-    @Value("${OPENAI_API_KEY}")
-    private String OPENAI_API_KEY;
-
+    private static final int MAX_MESSAGES = 1000;
     private final StringIdGenerator idGenerator = new SecureRandomIdGenerator();
 
     private final ChatMemoryStore chatStore = new InMemoryChatMemoryStore();
 
     public ChatModel model;
-
-    private static final int MAX_MESSAGES = 1000;
+    @Value("${OPENAI_API_KEY}")
+    private String OPENAI_API_KEY;
 
     @PostConstruct
     public void setup() {
@@ -50,7 +48,7 @@ public class ChatServiceImpl implements ChatService {
                 .maxMessages(MAX_MESSAGES)
                 .build();
 
-        return new ChatHandler<T>(chatId, model, chatMemory, deserializer);
+        return new ChatHandler<>(chatId, model, chatMemory, deserializer);
     }
 
     @Override

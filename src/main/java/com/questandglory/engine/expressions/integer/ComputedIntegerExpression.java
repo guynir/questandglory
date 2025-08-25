@@ -4,9 +4,9 @@ import com.questandglory.engine.EngineFacade;
 
 public class ComputedIntegerExpression extends IntegerExpression {
 
-    private String operator; // e.g., "+", "-", "*", "/".
-    private IntegerExpression leftExpression;
-    private IntegerExpression rightExpression;
+    private final String operator; // e.g., "+", "-", "*", "/".
+    private final IntegerExpression leftExpression;
+    private final IntegerExpression rightExpression;
 
     public ComputedIntegerExpression() {
         this(null, null, null);

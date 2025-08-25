@@ -4,14 +4,16 @@ import com.questandglory.engine.EngineFacade;
 import com.questandglory.engine.GameState;
 import com.questandglory.engine.InMemoryGameState;
 import com.questandglory.engine.statements.*;
-import com.questandglory.parser.antlr.AntlrScriptParserImpl;
-import com.questandglory.parser.antlr.ParsingResults;
+import com.questandglory.language.compiler.Compiler;
+import com.questandglory.language.compiler.DefaultCompiler;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class TestAntlrScriptParserImpl {
+
+    private final Compiler compiler = new DefaultCompiler();
 
     /**
      * Test that parser successfully parses a simple script with a message statement. The message is a composite
@@ -26,8 +28,8 @@ public class TestAntlrScriptParserImpl {
 
         GameState state = new InMemoryGameState();
         state.registerVariable("name", String.class);
-        AntlrScriptParserImpl parser = new AntlrScriptParserImpl();
-        ProgramStatement program = parser.parseScript(script, state).program();
+
+        ProgramStatement program = compiler.compile(script, state).program();
         Statements statements = program.getStatements();
         EngineFacade facade = new TestableEngineFacade();
         facade.state().registerVariable("name", String.class, "John");
@@ -51,8 +53,7 @@ public class TestAntlrScriptParserImpl {
                 name = INPUT();
                 """;
 
-        AntlrScriptParserImpl parser = new AntlrScriptParserImpl();
-        ProgramStatement program = parser.parseScript(script).program();
+        ProgramStatement program = compiler.compile(script).program();
 
         // Make sure the program has been parsed correctly two statements -- Message and Input.
         Statements statements = program.getStatements();

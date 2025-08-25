@@ -9,11 +9,10 @@ import org.slf4j.LoggerFactory;
 
 public abstract class Statement implements InterruptableHandler<EngineFacade> {
 
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Getter
     @Setter
     protected Location location;
-
-    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public Statement(Location location) {
         this.location = location;
@@ -29,7 +28,7 @@ public abstract class Statement implements InterruptableHandler<EngineFacade> {
     }
 
     public void handle(EngineFacade facade) throws InterruptedException {
-        logger.info("Processing line #{}.", location.lineNumber());
+        logger.info("Processing line #{}.", location.lineNumber);
         handleInternal(facade);
     }
 

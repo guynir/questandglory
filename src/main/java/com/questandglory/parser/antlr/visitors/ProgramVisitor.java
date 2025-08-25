@@ -10,7 +10,7 @@ public class ProgramVisitor extends AbstractLanguageVisitor<ProgramStatement> {
     @Override
     public ProgramStatement visitProgram(LanguageParser.ProgramContext ctx) {
         Statements statements = factory.statements(ctx.statements());
-        ProgramStatement program = new ProgramStatement(Location.parse(ctx));
+        ProgramStatement program = new ProgramStatement(Location.from(ctx));
         program.setStatements(statements);
 
         return program;

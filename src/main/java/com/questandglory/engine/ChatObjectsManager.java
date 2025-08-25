@@ -7,11 +7,9 @@ import java.util.Map;
 
 public class ChatObjectsManager {
 
-    private final EngineFacade facade;
-
     public static final String CHAT_HANDLERS = "CHAT_HANDLERS";
-
     public static final String SYSTEM_MESSAGE = "SYSTEM_MESSAGE";
+    private final EngineFacade facade;
 
     public ChatObjectsManager(EngineFacade facade) {
         this.facade = facade;

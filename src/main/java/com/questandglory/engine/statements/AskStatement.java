@@ -22,6 +22,24 @@ public class AskStatement extends Statement {
         this.message = expression;
     }
 
+    private static Boolean parseBoolean(String st) {
+        Boolean result;
+        st = st.trim().toLowerCase();
+        while (st.endsWith(".")) {
+            st = st.substring(0, st.length() - 1);
+        }
+
+        if (st.equals("true") || st.equals("1") || st.equals("yes")) {
+            result = true;
+        } else if (st.equals("false") || st.equals("0") || st.equals("no")) {
+            result = false;
+        } else {
+            result = null;
+        }
+
+        return result;
+    }
+
     @Override
     protected void handleInternal(EngineFacade facade) throws InterruptedException {
         // Helps to access chat handlers.
@@ -53,23 +71,5 @@ public class AskStatement extends Statement {
         }
 
         facade.state().setVariable(target.getName(), value);
-    }
-
-    private static Boolean parseBoolean(String st) {
-        Boolean result;
-        st = st.trim().toLowerCase();
-        while (st.endsWith(".")) {
-            st = st.substring(0, st.length() - 1);
-        }
-
-        if (st.equals("true") || st.equals("1") || st.equals("yes")) {
-            result = true;
-        } else if (st.equals("false") || st.equals("0") || st.equals("no")) {
-            result = false;
-        } else {
-            result = null;
-        }
-
-        return result;
     }
 }

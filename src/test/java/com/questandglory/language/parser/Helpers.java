@@ -1,8 +1,9 @@
 package com.questandglory.language.parser;
 
 import com.questandglory.engine.EngineFacade;
-import com.questandglory.parser.antlr.AntlrScriptParserImpl;
-import com.questandglory.parser.antlr.ParsingResults;
+import com.questandglory.language.compiler.CompiledScript;
+import com.questandglory.language.compiler.Compiler;
+import com.questandglory.language.compiler.DefaultCompiler;
 import com.questandglory.services.ChatServiceImpl;
 import org.springframework.core.io.ClassPathResource;
 
@@ -14,16 +15,17 @@ import java.util.Properties;
 
 public class Helpers {
 
-    public record ExecutionResult(ParsingResults results, EngineFacade facade) {
+    private static final Compiler COMPILER = new DefaultCompiler();
+
+    public record ExecutionResult(CompiledScript compiled, EngineFacade facade) {
     }
 
-    public static ParsingResults parse(String script) throws IOException, InterruptedException {
-        AntlrScriptParserImpl parser = new AntlrScriptParserImpl();
-        return parser.parseScript(script);
+    public static CompiledScript compile(String script) {
+        return COMPILER.compile(script);
     }
 
     public static ExecutionResult execute(String script) throws IOException, InterruptedException {
-        ParsingResults results = parse(script);
+        CompiledScript results = compile(script);
 
         TestableEngineFacade facade = new TestableEngineFacade();
         facade.setChatService(Helpers.createChatService());

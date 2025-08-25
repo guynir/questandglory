@@ -11,7 +11,7 @@ public class ExistingVariableVisitor extends AbstractLanguageVisitor<Identifier>
     public Identifier visitVariable(LanguageParser.VariableContext ctx) {
         String variableName = ctx.getText();
         if (!gameState.isDefined(variableName)) {
-            throw new CompilationException("Variable '" + variableName + "' is not defined.", Location.parse(ctx));
+            throw new CompilationException("Variable '" + variableName + "' is not defined.", Location.from(ctx));
         }
 
         return new Identifier(variableName);

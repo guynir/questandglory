@@ -1,9 +1,9 @@
 package com.questandglory.language.parser;
 
+import com.questandglory.language.compiler.CompiledScript;
+import com.questandglory.language.compiler.Compiler;
+import com.questandglory.language.compiler.DefaultCompiler;
 import com.questandglory.parser.CompilationException;
-import com.questandglory.parser.ScriptParser;
-import com.questandglory.parser.antlr.AntlrScriptParserImpl;
-import com.questandglory.parser.antlr.ParsingResults;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -15,13 +15,14 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 public class TestAntlrProgramParsing {
 
+    private final Compiler compiler = new DefaultCompiler();
+
     @Test
     @DisplayName("Test should parse empty statements block")
     public void testShouldParseEmptyStatement() {
         String script = "";
 
-        ScriptParser parser = new AntlrScriptParserImpl();
-        ParsingResults results = parser.parseScript(script);
+        CompiledScript results = compiler.compile(script);
 
         assertThat(results.program().getStatements()).isNotNull();
         assertThat(results.program().getStatements()).hasSize(0);
@@ -35,8 +36,7 @@ public class TestAntlrProgramParsing {
                 % Another comment line.
                 """;
 
-        ScriptParser parser = new AntlrScriptParserImpl();
-        ParsingResults results = parser.parseScript(script);
+        CompiledScript results = compiler.compile(script);
 
         assertThat(results.program().getStatements()).isNotNull();
         assertThat(results.program().getStatements()).hasSize(0);
@@ -119,7 +119,7 @@ public class TestAntlrProgramParsing {
         String script = """
                 var counter = 0;
                 """;
-        assertThatExceptionOfType(CompilationException.class).isThrownBy(() -> Helpers.parse(script));
+        assertThatExceptionOfType(CompilationException.class).isThrownBy(() -> Helpers.compile(script));
     }
 }
 

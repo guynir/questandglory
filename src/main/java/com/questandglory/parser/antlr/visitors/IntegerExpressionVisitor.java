@@ -6,7 +6,9 @@ import com.questandglory.engine.expressions.integer.ComputedIntegerExpression;
 import com.questandglory.engine.expressions.integer.IntegerExpression;
 import com.questandglory.engine.expressions.integer.IntegerVariableExpression;
 import com.questandglory.engine.expressions.integer.LiteralIntegerValueExpression;
+import com.questandglory.parser.CompilationException;
 import com.questandglory.parser.antlr.LanguageParser;
+import com.questandglory.parser.antlr.Location;
 
 public class IntegerExpressionVisitor extends AbstractLanguageVisitor<IntegerExpression> {
 
@@ -41,8 +43,8 @@ public class IntegerExpressionVisitor extends AbstractLanguageVisitor<IntegerExp
         if (isVariableOfType(variable.getName(), Integer.class)) {
             return new IntegerVariableExpression(variable.getName());
         } else {
-            addError(ctx, "Variable '" + variable.getName() + "' must be an Integer type.");
-            return null;
+            Location location = Location.from(ctx);
+            throw new CompilationException("Variable '" + variable.getName() + "' must be of Integer type.", location);
         }
     }
 

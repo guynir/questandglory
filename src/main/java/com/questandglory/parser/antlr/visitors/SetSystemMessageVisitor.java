@@ -14,6 +14,6 @@ public class SetSystemMessageVisitor extends AbstractLanguageVisitor<SetSystemMe
         String chatId = ctx.chatId != null ? ctx.chatId.getText() : null;
         StringExpression message = factory.stringExpression(ctx.message);
 
-        return new SetSystemMessageStatement(Location.parse(ctx), chatId, message);
+        return new SetSystemMessageStatement(Location.from(ctx), chatId, message);
     }
 }

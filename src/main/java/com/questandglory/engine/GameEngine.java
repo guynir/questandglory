@@ -8,14 +8,10 @@ import lombok.Getter;
 public class GameEngine {
 
     private final ProgramStatement program;
-
-    private final Thread executionThread = new Thread(this::run);
-
     private final ChatService chatService;
-
     @Getter
     private final Channels channels;
-
+    private final Thread executionThread = new Thread(this::run);
     @Getter
     private final String gamePlayId;
 

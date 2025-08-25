@@ -10,7 +10,7 @@ public class StatementsVisitor extends AbstractLanguageVisitor<Statements> {
 
     @Override
     public Statements visitStatements(LanguageParser.StatementsContext ctx) {
-        Statements statements = new Statements(Location.parse(ctx));
+        Statements statements = new Statements(Location.from(ctx));
         ctx.statement().forEach(statementContext -> {
             Statement statement = factory.allStatementsDelegator(statementContext);
             if (statement == null) {

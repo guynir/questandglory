@@ -38,7 +38,7 @@ public class DefineVariableVisitor extends AbstractLanguageVisitor<DefineVariabl
             initialValue = getDefault(variableType);
         }
 
-        return new DefineVariableStatement(Location.parse(ctx), variableName, variableType, initialValue);
+        return new DefineVariableStatement(Location.from(ctx), variableName, variableType, initialValue);
     }
 
     protected VariableTypeEnum resolveVariableType(String variableType) {

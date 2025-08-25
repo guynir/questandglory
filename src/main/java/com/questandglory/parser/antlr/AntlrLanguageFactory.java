@@ -8,18 +8,13 @@ import com.questandglory.engine.expressions.integer.IntegerExpression;
 import com.questandglory.engine.expressions.string.LiteralStringValueExpression;
 import com.questandglory.engine.expressions.string.StringExpression;
 import com.questandglory.engine.statements.*;
-import com.questandglory.parser.CompilationErrors;
 import com.questandglory.parser.LanguageFactory;
 import com.questandglory.parser.antlr.visitors.*;
-import lombok.Getter;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 public class AntlrLanguageFactory implements LanguageFactory {
 
     private final GameState gameState;
-
-    @Getter
-    private final CompilationErrors errors = new CompilationErrors();
 
     public AntlrLanguageFactory(GameState gameState) {
         this.gameState = gameState;
@@ -127,7 +122,6 @@ public class AntlrLanguageFactory implements LanguageFactory {
     protected <T extends AbstractLanguageVisitor<?>> T setup(T visitor) {
         visitor.setGameState(gameState);
         visitor.setFactory(this);
-        visitor.setCompilationErrors(errors);
         return visitor;
     }
 

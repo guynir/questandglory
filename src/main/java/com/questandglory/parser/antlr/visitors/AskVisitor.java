@@ -13,6 +13,6 @@ public class AskVisitor extends AbstractLanguageVisitor<AskStatement> {
         String chatId = ctx.chatId != null ? ctx.chatId.getText() : null;
         StringExpression message = factory.stringExpression(ctx.message);
 
-        return new AskStatement(Location.parse(ctx), target, chatId, message);
+        return new AskStatement(Location.from(ctx), target, chatId, message);
     }
 }

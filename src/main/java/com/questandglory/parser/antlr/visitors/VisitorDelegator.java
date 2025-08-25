@@ -49,28 +49,4 @@ public class VisitorDelegator extends AbstractLanguageVisitor<Statement> {
     public Statement visitTranslateStatement(LanguageParser.TranslateStatementContext ctx) {
         return factory.translateStatement(ctx);
     }
-
-    //
-//    @Override
-//    protected Statement aggregateResult(Statement aggregate, Statement nextResult) {
-//        if (nextResult == null) {
-//            return aggregate;
-//        }
-//
-//        if (aggregate == null) {
-//            return nextResult;
-//        }
-//
-//        Statements statements;
-//        if (aggregate instanceof Statements statementsBlock) {
-//            statements = statementsBlock;
-//        } else {
-//            aggregate = statements = new Statements();
-//            statements.add(aggregate);
-//        }
-//
-//        statements.add(nextResult);
-//
-//        return aggregate;
-//    }
 }

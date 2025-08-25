@@ -36,8 +36,9 @@ public interface GameState {
 
     /**
      * Sets variable in the game state.
+     *
      * @param identifier Identifier of variable.
-     * @param value Value to set.
+     * @param value      Value to set.
      */
     void setVariable(Identifier identifier, Object value);
 

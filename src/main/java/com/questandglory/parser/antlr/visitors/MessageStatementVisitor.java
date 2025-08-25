@@ -10,6 +10,6 @@ public class MessageStatementVisitor extends AbstractLanguageVisitor<MessageStat
     @Override
     public MessageStatement visitMessageStatement(LanguageParser.MessageStatementContext ctx) {
         StringExpression expression = factory.stringExpression(ctx.message);
-        return new MessageStatement(Location.parse(ctx), expression);
+        return new MessageStatement(Location.from(ctx), expression);
     }
 }

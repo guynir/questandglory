@@ -2,8 +2,9 @@ package com.questandglory.services;
 
 import com.questandglory.engine.GameEngine;
 import com.questandglory.engine.channels.ChannelFactory;
-import com.questandglory.parser.antlr.AntlrScriptParserImpl;
-import com.questandglory.parser.antlr.ParsingResults;
+import com.questandglory.language.compiler.CompiledScript;
+import com.questandglory.language.compiler.Compiler;
+import com.questandglory.language.compiler.DefaultCompiler;
 import com.questandglory.utils.GlobalIdGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,8 +44,8 @@ public class GameEngineServiceImpl implements GameEngineService {
             throw new RuntimeException(e);
         }
 
-        AntlrScriptParserImpl parser = new AntlrScriptParserImpl();
-        ParsingResults results = parser.parseScript(script);
+        Compiler compiler = new DefaultCompiler();
+        CompiledScript results = compiler.compile(script);
 
         String gamePlayId = GlobalIdGenerator.generateId();
         GameEngine engine = new GameEngine(results.program(),

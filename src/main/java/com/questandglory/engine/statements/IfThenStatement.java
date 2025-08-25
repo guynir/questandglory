@@ -4,7 +4,7 @@ import com.questandglory.engine.EngineFacade;
 import com.questandglory.engine.expressions.bool.BooleanExpression;
 import com.questandglory.parser.antlr.Location;
 
-public class IfThenStatement extends Statement{
+public class IfThenStatement extends Statement {
 
     private final BooleanExpression condition;
     private final Statement statement;

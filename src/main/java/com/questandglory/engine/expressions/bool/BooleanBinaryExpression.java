@@ -2,7 +2,7 @@ package com.questandglory.engine.expressions.bool;
 
 import com.questandglory.engine.EngineFacade;
 
-public class BooleanBinaryExpression extends  BooleanExpression {
+public class BooleanBinaryExpression extends BooleanExpression {
 
     private final BooleanExpression left;
     private final BooleanExpression right;

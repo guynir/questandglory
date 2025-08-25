@@ -21,13 +21,11 @@ public class ErrorListener implements ANTLRErrorListener {
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
-        throw new CompilationException(msg, Location.of(line, charPositionInLine));
+        throw new CompilationException(msg, Location.of(line, charPositionInLine, ""));
     }
 
     @Override
-    public void reportAmbiguity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, boolean exact, BitSet ambigAlts, ATNConfigSet configs) {
-//        Token t = recognizer.getTokenStream().get(startIndex);
-//        throw new CompilationException("Ambiguity error.", Location.of(t.getLine(), t.getCharPositionInLine()));
+    public void reportAmbiguity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, boolean exact, BitSet ambiguousAlts, ATNConfigSet configs) {
     }
 
     @Override
@@ -37,7 +35,5 @@ public class ErrorListener implements ANTLRErrorListener {
 
     @Override
     public void reportContextSensitivity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, int prediction, ATNConfigSet configs) {
-//        Token t = recognizer.getTokenStream().get(startIndex);
-//        throw new CompilationException("Context sensitivity issue.", Location.of(t.getLine(), t.getCharPositionInLine()));
     }
 }

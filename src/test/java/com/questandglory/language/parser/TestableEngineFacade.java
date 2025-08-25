@@ -61,7 +61,6 @@ public class TestableEngineFacade implements EngineFacade {
 
     @Override
     public void closeMailbox(Mailbox mailbox) {
-
     }
 
     @Override

@@ -10,6 +10,6 @@ public class InputStatementVisitor extends AbstractLanguageVisitor<InputStatemen
     @Override
     public InputStatement visitInputStatement(LanguageParser.InputStatementContext ctx) {
         Identifier identifier = factory.identifier(ctx.identifier());
-        return new InputStatement(Location.parse(ctx), identifier.getName());
+        return new InputStatement(Location.from(ctx), identifier.getName());
     }
 }

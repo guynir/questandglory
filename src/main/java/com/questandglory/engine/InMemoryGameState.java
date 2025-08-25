@@ -115,7 +115,7 @@ public class InMemoryGameState implements GameState {
     public boolean exists(ParserRuleContext ctx) {
         Class<?> variableType = variableTypes.get(ctx.getText());
         if (variableType == null) {
-            throw new CompilationException("Variable " + ctx.getText() + " is undefined.", Location.parse(ctx));
+            throw new CompilationException("Variable " + ctx.getText() + " is undefined.", Location.from(ctx));
         }
         return true;
     }

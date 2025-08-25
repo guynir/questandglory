@@ -6,25 +6,23 @@ import java.util.stream.Collectors;
 public class Languages {
 
     /**
+     * Set of languages that are written from right to left (RTL).
+     */
+    private static final Set<Locale> RTL_LANGUAGES = createRTLLanguagesSet();
+    /**
      * Maps a language name to its corresponding Locale.
      */
-    private static Map<String, Locale> LANGUAGES_MAP = createLanguagesMap();
-
+    private static final Map<String, Locale> LANGUAGES_MAP = createLanguagesMap();
     /**
      * Set of supported languages in their display names.
      */
     private static final Set<String> SUPPORTED_LANGUAGES_MAP = LANGUAGES_MAP.keySet();
-
     /**
      * Set of supported languages in their display names, all in lower case.
      */
     private static final Set<String> SUPPORTED_LANGUAGES_MAP_LOWER_CASE = SUPPORTED_LANGUAGES_MAP.stream().map(String::toLowerCase).collect(Collectors.toSet());
 
-    /**
-     * Set of languages that are written from right to left (RTL).
-     */
-    private static final Set<Locale> RTL_LANGUAGES = createRTLLanguagesSet();
-
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isSupportedLanguage(String language) {
         return SUPPORTED_LANGUAGES_MAP_LOWER_CASE.contains(language.trim().toLowerCase());
     }

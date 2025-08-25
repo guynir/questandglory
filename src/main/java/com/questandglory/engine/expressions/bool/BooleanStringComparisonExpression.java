@@ -3,7 +3,7 @@ package com.questandglory.engine.expressions.bool;
 import com.questandglory.engine.EngineFacade;
 import com.questandglory.engine.expressions.string.StringExpression;
 
-public class BooleanStringComparisonExpression extends  BooleanExpression {
+public class BooleanStringComparisonExpression extends BooleanExpression {
 
     private final StringExpression left;
     private final StringExpression right;

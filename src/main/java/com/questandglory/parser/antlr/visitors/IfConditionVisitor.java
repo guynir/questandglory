@@ -13,6 +13,6 @@ public class IfConditionVisitor extends AbstractLanguageVisitor<IfThenStatement>
         BooleanExpression condition = factory.booleanExpression(ctx.booleanExpression());
         Statement statement = factory.statements(ctx.trueStatements);
         Statement elseStatement = ctx.elseStatements != null ? factory.statements(ctx.elseStatements) : null;
-        return new IfThenStatement(Location.parse(ctx), condition, statement, elseStatement);
+        return new IfThenStatement(Location.from(ctx), condition, statement, elseStatement);
     }
 }

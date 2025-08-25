@@ -20,7 +20,7 @@ public class AssignmentParserVisitor extends AbstractLanguageVisitor<Object> {
     @Override
     public AssignmentStatement visitAssignmentStatement(LanguageParser.AssignmentStatementContext ctx) {
         Identifier identifier = (Identifier) super.visit(ctx.identifier());
-        Expression<?> expression = null;
+        Expression<?> expression;
         if (ctx.integerExpression() != null) {
             expression = (IntegerExpression) super.visit(ctx.integerExpression());
         } else if (ctx.stringExpression() != null) {
@@ -40,7 +40,7 @@ public class AssignmentParserVisitor extends AbstractLanguageVisitor<Object> {
                     + " cannot be assigned an expression of type "
                     + expression.getType().getSimpleName());
         }
-        return new AssignmentStatement(Location.parse(ctx), identifier.getName(), expression);
+        return new AssignmentStatement(Location.from(ctx), identifier.getName(), expression);
     }
 
     @Override

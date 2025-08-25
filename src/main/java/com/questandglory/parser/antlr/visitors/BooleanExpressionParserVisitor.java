@@ -2,7 +2,9 @@ package com.questandglory.parser.antlr.visitors;
 
 import com.questandglory.engine.constructs.Identifier;
 import com.questandglory.engine.expressions.bool.*;
+import com.questandglory.parser.CompilationException;
 import com.questandglory.parser.antlr.LanguageParser;
+import com.questandglory.parser.antlr.Location;
 
 public class BooleanExpressionParserVisitor extends AbstractLanguageVisitor<BooleanExpression> {
 
@@ -13,8 +15,8 @@ public class BooleanExpressionParserVisitor extends AbstractLanguageVisitor<Bool
         if (isVariableOfType(variable.getName(), Boolean.class)) {
             return new BooleanVariableExpression(variable.getName());
         } else {
-            addError(ctx, "Variable '" + variable.getName() + "' must be of Boolean type.");
-            return null;
+            Location location = Location.from(ctx);
+            throw new CompilationException("Variable '" + variable.getName() + "' must be of Boolean type.", location);
         }
     }
 
