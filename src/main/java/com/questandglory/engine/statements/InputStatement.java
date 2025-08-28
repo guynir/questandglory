@@ -15,8 +15,6 @@ public class InputStatement extends Statement {
     @Getter
     private final String variableName;
 
-    private final String componentKey = "input_" + GlobalIdGenerator.generateId();
-
     public InputStatement(Location location, String variableName) {
         super(location);
         this.variableName = variableName;
@@ -24,6 +22,7 @@ public class InputStatement extends Statement {
 
     @Override
     protected void handleInternal(EngineFacade facade) throws InterruptedException {
+        final String componentKey = "input_" + GlobalIdGenerator.generateId();
         try (Mailbox mailbox = facade.createMailbox()) {
             logger.info("Creating mailbox for user input with ID: {}", mailbox.getMailboxId());
             RequestUserTextInputMessage message = new RequestUserTextInputMessage(componentKey, mailbox.getMailboxId());

@@ -41,7 +41,8 @@ public class IncomingMessagesChannel implements MailboxOwner {
     }
 
     @Override
-    public void closeMailbox(Mailbox mailbox) {
-        mailboxMap.remove(mailbox.getMailboxId());
+    public void removeMailbox(String mailboxId) {
+        //noinspection resource
+        mailboxMap.remove(mailboxId);
     }
 }

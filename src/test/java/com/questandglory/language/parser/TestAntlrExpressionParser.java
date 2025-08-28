@@ -1,14 +1,11 @@
 package com.questandglory.language.parser;
 
 import com.questandglory.engine.GameState;
-import com.questandglory.engine.statements.AssignmentStatement;
-import com.questandglory.parser.LanguageFactory;
-import com.questandglory.parser.antlr.AntlrLanguageFactory;
-import com.questandglory.parser.antlr.LanguageLexer;
-import com.questandglory.parser.antlr.LanguageParser;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
+import com.questandglory.engine.statements.ProgramStatement;
+import com.questandglory.language.compiler.Compiler;
+import com.questandglory.language.compiler.DefaultCompiler;
+import com.questandglory.language.script.Script;
+import com.questandglory.language.variables.VariablesDefinition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,17 +13,19 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class TestAntlrExpressionParser {
 
-    private LanguageFactory factory;
-
     private TestableEngineFacade facade;
 
     private GameState gameState;
+
+    private VariablesDefinition variables;
+
+    private final Compiler compiler = new DefaultCompiler();
 
     @BeforeEach
     public void setUp() {
         facade = new TestableEngineFacade();
         gameState = facade.state();
-        factory = new AntlrLanguageFactory(gameState);
+        variables = new VariablesDefinition();
     }
 
     @Test
@@ -35,13 +34,10 @@ public class TestAntlrExpressionParser {
                 A = 5 + 3 + B;
                 """;
 
-        gameState.registerVariable("A", Integer.class);
-        gameState.registerVariable("B", Integer.class);
+        variables.registerVariable("A", Integer.class);
+        variables.registerVariable("B", Integer.class);
 
-        ParseTree tree = createParser(script, gameState);
-        AssignmentStatement statement = factory.assignmentStatement(tree);
-
-        System.out.println(statement);
+        ProgramStatement program = compiler.compile(Script.from(script), variables).program();
     }
 
     @Test
@@ -50,14 +46,15 @@ public class TestAntlrExpressionParser {
                 A = B + "world ! -- " + (2 + 3);
                 """;
 
+        variables.registerVariable("A", String.class);
+        variables.registerVariable("B", String.class);
+
         gameState.registerVariable("A", String.class);
         gameState.registerVariable("B", String.class);
         gameState.setVariable("B", "Hello, ");
 
-        ParseTree tree = createParser(script, gameState);
-        AssignmentStatement statement = factory.assignmentStatement(tree);
-
-        statement.handle(facade);
+        ProgramStatement program = compiler.compile(Script.from(script), variables).program();
+        program.handle(facade);
         String result = gameState.getVariable("A");
 
         assertThat(result).isEqualTo("Hello, world ! -- 5");
@@ -69,22 +66,15 @@ public class TestAntlrExpressionParser {
                 A = (true == (1 < 2)) AND ("hi" == "hi") AND ("NO" != "no") AND (FALSE == false) AND NOT false;
                 """;
 
+        variables.registerVariable("A", Boolean.class);
+
+        ProgramStatement program = compiler.compile(Script.from(script), variables).program();
+
         gameState.registerVariable("A", Boolean.class);
-
-        ParseTree tree = createParser(script, gameState);
-        AssignmentStatement statement = factory.assignmentStatement(tree);
-
-        statement.handle(facade);
+        program.handle(facade);
         Boolean result = gameState.getVariable("A");
         assertThat(result).isTrue();
     }
 
-    private ParseTree createParser(String script, GameState gameState) {
-        LanguageLexer lexer = new LanguageLexer(CharStreams.fromString(script));
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        LanguageParser parser = new LanguageParser(tokens);
-        parser.setGameState(gameState);
-        return parser.program();
-    }
 
 }

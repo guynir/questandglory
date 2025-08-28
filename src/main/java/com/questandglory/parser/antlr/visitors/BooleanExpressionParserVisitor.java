@@ -12,7 +12,7 @@ public class BooleanExpressionParserVisitor extends AbstractLanguageVisitor<Bool
     public BooleanExpression visitIdentifier(LanguageParser.IdentifierContext ctx) {
         Identifier variable = factory.identifier(ctx);
 
-        if (isVariableOfType(variable.getName(), Boolean.class)) {
+        if (variables.isVariableOfType(variable.getName(), Boolean.class)) {
             return new BooleanVariableExpression(variable.getName());
         } else {
             Location location = Location.from(ctx);

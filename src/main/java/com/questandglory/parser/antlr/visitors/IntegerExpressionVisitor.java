@@ -40,7 +40,7 @@ public class IntegerExpressionVisitor extends AbstractLanguageVisitor<IntegerExp
     public IntegerExpression visitIdentifier(LanguageParser.IdentifierContext ctx) {
         Identifier variable = factory.identifier(ctx);
 
-        if (isVariableOfType(variable.getName(), Integer.class)) {
+        if (variables.isVariableOfType(variable.getName(), Integer.class)) {
             return new IntegerVariableExpression(variable.getName());
         } else {
             Location location = Location.from(ctx);

@@ -3,6 +3,7 @@ package com.questandglory.web.controllers;
 import com.questandglory.engine.channels.ChannelFactory;
 import com.questandglory.engine.channels.Channels;
 import com.questandglory.engine.messages.ClientMessage;
+import com.questandglory.engine.messages.client.SetLanguageMessage;
 import com.questandglory.engine.messages.client.TextInputMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,5 +44,14 @@ public class ClientMessagesController {
         Channels channels = channelFactory.findChannels(instanceId);
         channels.incomingMessagesChannel.postMessage(mailboxId, inputMessage);
     }
+
+    @MessageMapping("/messages/{instanceId}/setLanguage")
+    public void setLanguage(ClientMessage message, @DestinationVariable String instanceId) {
+        SetLanguageMessage setLang = (SetLanguageMessage) message;
+
+        Channels channels = channelFactory.findChannels(instanceId);
+//        channels.incomingMessagesChannel.postMessage(mailboxId, inputMessage);
+    }
+
 
 }

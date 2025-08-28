@@ -11,7 +11,7 @@ public class StringExpressionParserVisitor extends AbstractLanguageVisitor<Strin
     public StringExpression visitIdentifier(LanguageParser.IdentifierContext ctx) {
         Identifier variable = factory.identifier(ctx);
 
-        if (isVariableOfType(variable.getName(), String.class)) {
+        if (variables.isVariableOfType(variable.getName(), String.class)) {
             return new StringVariableExpression(variable.getName());
         }
         throw new IllegalStateException("Variable '" + variable.getName() + "' must be an String type.");

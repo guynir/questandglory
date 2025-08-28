@@ -4,8 +4,7 @@ import com.questandglory.engine.channels.Mailbox;
 import com.questandglory.engine.messages.ClientMessage;
 import com.questandglory.engine.messages.ServerMessage;
 import com.questandglory.services.ChatHandler;
-
-import java.util.Locale;
+import com.questandglory.services.Language;
 
 /**
  * Engine facade expose set of operations that allows a game step to access an outside resources and communicate with
@@ -46,7 +45,7 @@ public interface EngineFacade {
      * @param targetLanguage Target language to translate the message to.
      * @return Translated message as a string.
      */
-    String translate(String message, Locale targetLanguage);
+    String translate(String message, Language targetLanguage);
 
     /**
      * Send a message to a specific queue or topic. Typically, a queue is associated with a specific game play client.
@@ -55,13 +54,51 @@ public interface EngineFacade {
      */
     void sendMessage(ServerMessage message);
 
+    /**
+     * @return A new mailbox.
+     */
     Mailbox createMailbox();
 
+    /**
+     * Post a message to a specific mailbox.
+     *
+     * @param mailboxId Mailbox identifier.
+     * @param message   Message to post.
+     */
     void postMessage(String mailboxId, ClientMessage message);
 
+    /**
+     * Close a mailbox and release all its resources.
+     *
+     * @param mailbox Mailbox to close.
+     */
     void closeMailbox(Mailbox mailbox);
 
+    /**
+     * Create a chat handler for the given type.
+     *
+     * @param type Type of the chat handler.
+     * @param <T>  Generic type of chat handler.
+     * @return A new chat handler.
+     */
     <T> ChatHandler<T> creatChat(Class<T> type);
 
+    /**
+     * Create a simple chat handler that returns string responses.
+     *
+     * @return New simple chat handler.
+     */
     ChatHandler<String> createSimpleChat();
+
+    /**
+     * Provide indication if the game's original language is different from the current language.
+     *
+     * @return {@code true} if translation is required, {@code false} otherwise.
+     */
+    boolean isTranslationRequired();
+
+    /**
+     * @return Current language for the game.
+     */
+    Language getCurrentLanguage();
 }

@@ -1,7 +1,7 @@
 package com.questandglory.parser.antlr.listeners;
 
-import com.questandglory.engine.GameState;
 import com.questandglory.engine.statements.DefineVariableStatement;
+import com.questandglory.language.variables.VariablesDefinition;
 import com.questandglory.parser.LanguageFactory;
 import com.questandglory.parser.antlr.LanguageBaseListener;
 import com.questandglory.parser.antlr.LanguageParser;
@@ -17,7 +17,7 @@ public class VariableDeclarationLanguageListener extends LanguageBaseListener {
     /**
      * Game state to register the variables at.
      */
-    private final GameState gameState;
+    private final VariablesDefinition variables;
 
     /**
      * Factory to call an actual visitor to parse variable declaration definition.
@@ -26,9 +26,18 @@ public class VariableDeclarationLanguageListener extends LanguageBaseListener {
 
     /**
      * Class constructor.
+     *
+     * @param factory Language factory.
      */
-    public VariableDeclarationLanguageListener(GameState gameState, LanguageFactory factory) {
-        this.gameState = gameState;
+    public VariableDeclarationLanguageListener(LanguageFactory factory) {
+        this(new VariablesDefinition(), factory);
+    }
+
+    /**
+     * Class constructor.
+     */
+    public VariableDeclarationLanguageListener(VariablesDefinition variables, LanguageFactory factory) {
+        this.variables = variables != null ? variables : new VariablesDefinition();
         this.factory = factory;
     }
 
@@ -48,12 +57,12 @@ public class VariableDeclarationLanguageListener extends LanguageBaseListener {
         DefineVariableStatement statement = factory.defineVariable(ctx);
         String variableName = statement.getVariableName();
 
-        if (gameState.isDefined(variableName)) {
+        if (variables.isVariableDefined(variableName)) {
             throw new IllegalStateException("Variable '" + variableName + "' is already defined.");
         }
 
         // Register the newly encountered variable.
-        gameState.registerVariable(variableName, statement.getJavaType());
+        variables.registerVariable(variableName, statement.getJavaType());
     }
 
 }

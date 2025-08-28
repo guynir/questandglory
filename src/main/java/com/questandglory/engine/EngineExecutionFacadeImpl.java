@@ -1,31 +1,26 @@
 package com.questandglory.engine;
 
-import com.questandglory.engine.channels.Channels;
 import com.questandglory.engine.channels.Mailbox;
 import com.questandglory.engine.messages.ClientMessage;
 import com.questandglory.engine.messages.ServerMessage;
 import com.questandglory.services.ChatHandler;
-import com.questandglory.services.ChatService;
 import com.questandglory.services.JsonChatResponseDeserializer;
+import com.questandglory.services.Language;
 import com.questandglory.services.MessageTranslator;
 import com.questandglory.template.FreemarkerStringTemplateEngine;
 import com.questandglory.template.StringTemplateEngine;
 
-import java.util.Locale;
-
 public class EngineExecutionFacadeImpl implements EngineFacade {
 
-    private final Channels channels;
     private final GameState gameState = new InMemoryGameState();
-    private final ChatService chatService;
     private final StringTemplateEngine localTemplateEngine = new FreemarkerStringTemplateEngine();
     private final MessageTranslator messageTranslator;
     private final TransientEngineState engineState = new TransientEngineState();
+    private final GameEngine parent;
 
-    public EngineExecutionFacadeImpl(Channels channels, ChatService chatService) {
-        this.channels = channels;
-        this.chatService = chatService;
-        this.messageTranslator = chatService.createMessageTranslator();
+    public EngineExecutionFacadeImpl(GameEngine parent) {
+        this.messageTranslator = parent.getChatService().createMessageTranslator();
+        this.parent = parent;
     }
 
     @Override
@@ -42,37 +37,46 @@ public class EngineExecutionFacadeImpl implements EngineFacade {
         return localTemplateEngine.render(template, gameState.getVariables());
     }
 
-    public String translate(String message, Locale targetLanguage) {
-        return messageTranslator.translate(message, targetLanguage.getDisplayLanguage());
+    public String translate(String message, Language targetLanguage) {
+        return messageTranslator.translate(message, targetLanguage.displayNameEnglish());
     }
 
     @Override
     public void sendMessage(ServerMessage message) {
-        channels.send(message);
+        parent.getChannels().send(message);
     }
 
     @Override
     public Mailbox createMailbox() {
-        return channels.incomingMessagesChannel.createMailbox();
+        return parent.getChannels().incomingMessagesChannel.createMailbox();
     }
 
     @Override
     public void postMessage(String mailboxId, ClientMessage message) {
-        channels.incomingMessagesChannel.postMessage(mailboxId, message);
+        parent.getChannels().incomingMessagesChannel.postMessage(mailboxId, message);
     }
 
     @Override
     public void closeMailbox(Mailbox mailbox) {
-        channels.incomingMessagesChannel.closeMailbox(mailbox);
+        parent.getChannels().incomingMessagesChannel.removeMailbox(mailbox.getMailboxId());
     }
 
     public <T> ChatHandler<T> creatChat(Class<T> type) {
-        return chatService.createChatMemory(new JsonChatResponseDeserializer<>(type));
+        return parent.getChatService().createChatMemory(new JsonChatResponseDeserializer<>(type));
     }
 
     @Override
     public ChatHandler<String> createSimpleChat() {
-        return chatService.createSimpleChatMemory();
+        return parent.getChatService().createSimpleChatMemory();
     }
 
+    @Override
+    public boolean isTranslationRequired() {
+        return !parent.getLanguage().equals(parent.getOriginalLanguage());
+    }
+
+    @Override
+    public Language getCurrentLanguage() {
+        return parent.getLanguage();
+    }
 }

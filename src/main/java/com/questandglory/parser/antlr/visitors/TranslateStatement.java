@@ -5,18 +5,17 @@ import com.questandglory.engine.constructs.Identifier;
 import com.questandglory.engine.expressions.string.StringExpression;
 import com.questandglory.engine.statements.Statement;
 import com.questandglory.parser.antlr.Location;
-
-import java.util.Locale;
+import com.questandglory.services.Language;
 
 public class TranslateStatement extends Statement {
 
     private final Identifier targetVariable;
 
-    private final Locale language;
+    private final Language language;
 
     private final StringExpression text;
 
-    public TranslateStatement(Location location, Identifier targetVariable, Locale language, StringExpression text) {
+    public TranslateStatement(Location location, Identifier targetVariable, Language language, StringExpression text) {
         super(location);
         this.targetVariable = targetVariable;
         this.language = language;

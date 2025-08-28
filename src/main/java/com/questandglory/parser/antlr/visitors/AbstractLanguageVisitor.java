@@ -1,6 +1,6 @@
 package com.questandglory.parser.antlr.visitors;
 
-import com.questandglory.engine.GameState;
+import com.questandglory.language.variables.VariablesDefinition;
 import com.questandglory.parser.CompilationException;
 import com.questandglory.parser.LanguageFactory;
 import com.questandglory.parser.antlr.LanguageBaseVisitor;
@@ -12,7 +12,7 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 public class AbstractLanguageVisitor<T> extends LanguageBaseVisitor<T> {
 
     @Setter
-    protected GameState gameState;
+    protected VariablesDefinition variables;
 
     @Setter
     protected LanguageFactory factory;
@@ -30,13 +30,5 @@ public class AbstractLanguageVisitor<T> extends LanguageBaseVisitor<T> {
     @Override
     protected T aggregateResult(T aggregate, T nextResult) {
         return aggregate != null ? aggregate : nextResult;
-    }
-
-    protected boolean isVariableExist(String variableName) {
-        return gameState.isDefined(variableName);
-    }
-
-    protected boolean isVariableOfType(String variableName, Class<?> variableType) {
-        return isVariableExist(variableName) && variableType.isAssignableFrom(gameState.getVariableType(variableName));
     }
 }

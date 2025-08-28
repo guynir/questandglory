@@ -6,6 +6,7 @@ import dev.langchain4j.model.chat.response.ChatResponse;
 import java.util.HashMap;
 import java.util.Map;
 
+import static dev.langchain4j.data.message.SystemMessage.systemMessage;
 import static dev.langchain4j.data.message.UserMessage.userMessage;
 
 /**
@@ -51,8 +52,9 @@ public class MessageTranslator {
 
         TranslationKey key = new TranslationKey(message, targetLanguage);
         String translatedMessage = translations.get(key);
-        if (translatedMessage == null) {
-            ChatResponse response = model.chat(userMessage("Translate the following text to " + targetLanguage + ", do not add any further details:" + message));
+        if (translatedMessage == null && !message.isBlank()) {
+            ChatResponse response = model.chat(systemMessage("You are a professional translator. Translate the user's message to the target language, preserving its meaning and context."),
+                    userMessage("Translate the following text to " + targetLanguage + ", do not add any further details:" + message));
             translatedMessage = response.aiMessage().text();
             translations.put(key, translatedMessage);
         }

@@ -1,7 +1,6 @@
 package com.questandglory.engine;
 
 import com.questandglory.engine.constructs.Identifier;
-import org.antlr.v4.runtime.ParserRuleContext;
 
 import java.util.Map;
 
@@ -105,5 +104,11 @@ public interface GameState {
      */
     boolean is(String name, Class<?> type) throws IllegalArgumentException, UnknownVariableException;
 
-    boolean exists(ParserRuleContext variableName);
+    /**
+     * Provide indication if variable exist or not.
+     *
+     * @param variableName Variable name to test for.
+     * @return {@code true} if variable exist, {@code false} if not.
+     */
+    boolean exists(String variableName);
 }

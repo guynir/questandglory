@@ -31,7 +31,7 @@ public class AssignmentParserVisitor extends AbstractLanguageVisitor<Object> {
             throw new InternalCompilationErrorException("Unsupported expression.");
         }
 
-        Class<?> variableType = gameState.getVariableType(identifier.getName());
+        Class<?> variableType = variables.getVariableType(identifier.getName());
         if (!expression.getType().equals(variableType)) {
             throw new IllegalArgumentException("Variable '"
                     + identifier.getName()

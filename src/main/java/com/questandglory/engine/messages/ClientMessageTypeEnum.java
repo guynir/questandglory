@@ -2,6 +2,7 @@ package com.questandglory.engine.messages;
 
 public enum ClientMessageTypeEnum {
 
-    TEXT_INPUT
+    TEXT_INPUT,
+    SET_LANGUAGE
 
 }

@@ -6,6 +6,8 @@ import com.questandglory.engine.expressions.string.StringExpression;
 import com.questandglory.parser.CompilationException;
 import com.questandglory.parser.antlr.LanguageParser;
 import com.questandglory.parser.antlr.Location;
+import com.questandglory.services.Language;
+import com.questandglory.services.Languages;
 
 import java.util.Arrays;
 import java.util.Locale;
@@ -40,8 +42,7 @@ public class TranslationVisitor extends AbstractLanguageVisitor<TranslateStateme
             throw new CompilationException("Unsupported language for translation: " + language, Location.from(ctx.targetLanguage));
         }
 
-        Locale locale = Locale.forLanguageTag(language);
-
-        return new TranslateStatement(Location.from(ctx), targetVariable, locale, text);
+        Language lang = Languages.getLanguage(language);
+        return new TranslateStatement(Location.from(ctx), targetVariable, lang, text);
     }
 }

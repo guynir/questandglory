@@ -55,6 +55,15 @@ export interface GamePlayCreateResponse {
     clientQueueId: string;
 }
 
+export interface Language {
+    isoCode: string;
+    displayNameEnglish: string;
+    displayNameLocal: string;
+    ltr: boolean;
+}
+
+export const ENGLISH = { isoCode: "eng", displayNameEnglish: "English", displayNameLocal: "English", ltr: true };
+
 export async function createGamePlay(): Promise<GamePlayCreateResponse> {
     const response: AxiosResponse<GamePlayCreateResponse> = await axios.post("/api/v1/gameplay/");
     console.log(response);
@@ -64,4 +73,15 @@ export async function createGamePlay(): Promise<GamePlayCreateResponse> {
 export async function startGamePlay(gamePlayId: string) {
     const response: AxiosResponse<GamePlayCreateResponse> = await axios.post("/api/v1/gameplay/" + gamePlayId + "/start");
     console.log(response);
+}
+
+export async function getSupportedLanguages(): Promise<Array<Language>> {
+    const response: AxiosResponse<Array<Language>> = await axios.get("/api/v1/languages");
+    return response.data;
+}
+
+export async function setGamePlayLanguage(gamePlayId: string, isoCode: string) {
+    return axios.post("/api/v1/gameplay/" + gamePlayId + "/language", {
+        isoCode: isoCode
+    });
 }

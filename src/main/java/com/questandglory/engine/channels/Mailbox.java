@@ -51,7 +51,10 @@ public class Mailbox implements Closeable {
 
     @Override
     public void close() {
-        owner.closeMailbox(this);
+        if (owner != null && mailboxId != null) {
+            owner.removeMailbox(mailboxId);
+        }
+
         owner = null;
         messages = null;
     }

@@ -7,12 +7,13 @@ import com.questandglory.engine.messages.ServerMessage;
 import com.questandglory.services.ChatHandler;
 import com.questandglory.services.ChatService;
 import com.questandglory.services.JsonChatResponseDeserializer;
+import com.questandglory.services.Language;
 import com.questandglory.template.FreemarkerStringTemplateEngine;
 import com.questandglory.template.StringTemplateEngine;
+import lombok.Setter;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 
 public class TestableEngineFacade implements EngineFacade {
 
@@ -20,6 +21,7 @@ public class TestableEngineFacade implements EngineFacade {
     private final StringTemplateEngine localTemplateEngine = new FreemarkerStringTemplateEngine();
     private final TransientEngineState engineState = new TransientEngineState();
 
+    @Setter
     private ChatService chatService;
 
     public final List<ServerMessage> postedMessages = new LinkedList<>();
@@ -40,8 +42,8 @@ public class TestableEngineFacade implements EngineFacade {
     }
 
     @Override
-    public String translate(String message, Locale targetLanguage) {
-        return "";
+    public String translate(String message, Language targetLanguage) {
+        return message;
     }
 
     @Override
@@ -81,7 +83,13 @@ public class TestableEngineFacade implements EngineFacade {
 
     }
 
-    public void setChatService(ChatService chatService) {
-        this.chatService = chatService;
+    @Override
+    public boolean isTranslationRequired() {
+        return false;
+    }
+
+    @Override
+    public Language getCurrentLanguage() {
+        return null;
     }
 }

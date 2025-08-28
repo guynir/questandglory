@@ -1,11 +1,14 @@
 package com.questandglory.language.parser;
 
 import com.questandglory.engine.EngineFacade;
-import com.questandglory.engine.GameState;
-import com.questandglory.engine.InMemoryGameState;
-import com.questandglory.engine.statements.*;
+import com.questandglory.engine.statements.InputStatement;
+import com.questandglory.engine.statements.MessageStatement;
+import com.questandglory.engine.statements.ProgramStatement;
+import com.questandglory.engine.statements.Statements;
 import com.questandglory.language.compiler.Compiler;
 import com.questandglory.language.compiler.DefaultCompiler;
+import com.questandglory.language.script.Script;
+import com.questandglory.language.variables.VariablesDefinition;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -26,10 +29,11 @@ public class TestAntlrScriptParserImpl {
                 MESSAGE ("Hello, Mr. " + name + "! Your number is " + 12);
                 """;
 
-        GameState state = new InMemoryGameState();
-        state.registerVariable("name", String.class);
 
-        ProgramStatement program = compiler.compile(script, state).program();
+        VariablesDefinition variables = new VariablesDefinition();
+        variables.registerVariable("name", String.class);
+
+        ProgramStatement program = compiler.compile(Script.from(script), variables).program();
         Statements statements = program.getStatements();
         EngineFacade facade = new TestableEngineFacade();
         facade.state().registerVariable("name", String.class, "John");

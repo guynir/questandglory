@@ -1,9 +1,6 @@
 package com.questandglory.engine;
 
 import com.questandglory.engine.constructs.Identifier;
-import com.questandglory.parser.CompilationException;
-import com.questandglory.parser.antlr.Location;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.springframework.util.Assert;
 
 import java.util.HashMap;
@@ -112,11 +109,13 @@ public class InMemoryGameState implements GameState {
         return variableType != null && variableType.equals(type);
     }
 
-    public boolean exists(ParserRuleContext ctx) {
-        Class<?> variableType = variableTypes.get(ctx.getText());
-        if (variableType == null) {
-            throw new CompilationException("Variable " + ctx.getText() + " is undefined.", Location.from(ctx));
-        }
-        return true;
+    public boolean exists(String variableName) {
+        return variableTypes.containsKey(variableName);
+
+//        Class<?> variableType = variableTypes.get(ctx.getText());
+//        if (variableType == null) {
+//            throw new CompilationException("Variable " + ctx.getText() + " is undefined.", Location.from(ctx));
+//        }
+//        return true;
     }
 }

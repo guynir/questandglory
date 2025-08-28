@@ -6,14 +6,14 @@ options {
 }
 
 @header {
-    import com.questandglory.engine.GameState;
+    import com.questandglory.language.compiler.CompilerHelper;
 }
 
 @members {
-   private GameState gameState;
+   private CompilerHelper helper;
 
-   public void setGameState(GameState gameState) {
-       this.gameState = gameState;
+   public void setCompilerHelper(CompilerHelper helper) {
+       this.helper = helper;
    }
 }
 
@@ -69,16 +69,16 @@ defineVariableStatement         : VAR variableName=variable ':' type=variableTyp
 
 assignmentStatement      : identifier '=' (integerExpression | stringExpression | booleanExpression);
 
-stringExpression         : (stringLiteral | identifier {gameState.exists($identifier.ctx);} {gameState.is($identifier.text, String.class)}?) ('+' (stringLiteral | stringExpression | integerLiteral | identifier | integerExpression))*
+stringExpression         : (stringLiteral | identifier {helper.assertVariableType($identifier.ctx, String.class)}?) ('+' (stringLiteral | stringExpression | integerLiteral | identifier | integerExpression))*
                          ;
 
-integerExpression        : integerLiteral | identifier {gameState.is($identifier.text, Integer.class)}?
+integerExpression        : integerLiteral | identifier {helper.assertVariableType($identifier.ctx, Integer.class)}?
                          | left=integerExpression op=numericOperation right=integerExpression
                          | '(' integerExpression ')';
 numericOperation         : '+' | '-' | '*' | '/';
 
 booleanExpression        : (booleanLiteral)
-                         | identifier {gameState.is($identifier.text, Boolean.class)}?
+                         | identifier {helper.assertVariableType($identifier.ctx, Boolean.class)}?
                          | booleanUnaryExpression
                          | left=booleanExpression op=('AND' | 'OR' | 'XOR' | '==' | '!=') right=booleanExpression
                          | stringBinaryExpression

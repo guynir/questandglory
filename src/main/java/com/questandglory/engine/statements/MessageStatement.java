@@ -20,6 +20,9 @@ public class MessageStatement extends Statement {
     @Override
     protected void handleInternal(EngineFacade facade) {
         String renderedMessage = resolveMessage(facade);
+        if (facade.isTranslationRequired()) {
+            renderedMessage = facade.translate(renderedMessage, facade.getCurrentLanguage());
+        }
         facade.sendMessage(new ShowTextMessageMessage(GlobalIdGenerator.generateId(), renderedMessage));
     }
 

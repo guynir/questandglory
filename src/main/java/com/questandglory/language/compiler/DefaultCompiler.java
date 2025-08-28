@@ -1,8 +1,8 @@
 package com.questandglory.language.compiler;
 
-import com.questandglory.engine.GameState;
-import com.questandglory.engine.InMemoryGameState;
 import com.questandglory.engine.statements.ProgramStatement;
+import com.questandglory.language.script.Script;
+import com.questandglory.language.variables.VariablesDefinition;
 import com.questandglory.parser.CompilationException;
 import com.questandglory.parser.InternalCompilationErrorException;
 import com.questandglory.parser.LanguageFactory;
@@ -11,7 +11,6 @@ import com.questandglory.parser.antlr.LanguageLexer;
 import com.questandglory.parser.antlr.LanguageParser;
 import com.questandglory.parser.antlr.listeners.ErrorListener;
 import com.questandglory.parser.antlr.listeners.VariableDeclarationLanguageListener;
-import org.antlr.v4.runtime.ANTLRErrorStrategy;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.slf4j.Logger;
@@ -39,27 +38,29 @@ public class DefaultCompiler implements Compiler {
 
     @Override
     public CompiledScript compile(String script) throws CompilationException, InternalCompilationErrorException {
+        return compile(Script.from(script), null);
+    }
+
+    @Override
+    public CompiledScript compile(Script script) throws CompilationException, InternalCompilationErrorException {
         return compile(script, null);
     }
 
     @Override
-    public CompiledScript compile(String script, GameState state)
+    public CompiledScript compile(Script script, VariablesDefinition variables)
             throws CompilationException, InternalCompilationErrorException {
         Assert.notNull(script, "Script cannot be null");
-        if (state == null) {
-            state = new InMemoryGameState();
+        if (variables == null) {
+            variables = new VariablesDefinition();
         }
 
-        String[] parsedScript = script.split("(\n | \r\n | \n\r)");
-
-        LanguageFactory factory = new AntlrLanguageFactory(state);
-        LanguageLexer lexer = new LanguageLexer(CharStreams.fromString(script));
+        LanguageFactory factory = new AntlrLanguageFactory(variables);
+        LanguageLexer lexer = new LanguageLexer(CharStreams.fromString(script.getScript()));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         LanguageParser parser = new LanguageParser(tokens);
         parser.addErrorListener(new ErrorListener());
-        ANTLRErrorStrategy strategy = parser.getErrorHandler();
-        parser.addParseListener(new VariableDeclarationLanguageListener(state, factory));
-        parser.setGameState(state);
+        parser.addParseListener(new VariableDeclarationLanguageListener(variables, factory));
+        parser.setCompilerHelper(new CompilerHelper(variables));
 
         try {
             ProgramStatement program = factory.programStatement(parser.program());
@@ -68,7 +69,7 @@ public class DefaultCompiler implements Compiler {
             String spaces = " ".repeat(Math.max(0, ex.getLocation().columnNumber));
             String message = "Compilation error." +
                     System.lineSeparator() +
-                    parsedScript[ex.getLocation().lineNumber - 1]
+                    script.getLine(ex.getLocation().lineNumber)
                     + System.lineSeparator()
                     + " ".repeat(Math.max(0, ex.getLocation().columnNumber))
                     + "^--- "

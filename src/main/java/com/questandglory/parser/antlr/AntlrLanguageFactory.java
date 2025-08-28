@@ -1,6 +1,5 @@
 package com.questandglory.parser.antlr;
 
-import com.questandglory.engine.GameState;
 import com.questandglory.engine.constructs.Identifier;
 import com.questandglory.engine.expressions.Expression;
 import com.questandglory.engine.expressions.bool.BooleanExpression;
@@ -8,16 +7,17 @@ import com.questandglory.engine.expressions.integer.IntegerExpression;
 import com.questandglory.engine.expressions.string.LiteralStringValueExpression;
 import com.questandglory.engine.expressions.string.StringExpression;
 import com.questandglory.engine.statements.*;
+import com.questandglory.language.variables.VariablesDefinition;
 import com.questandglory.parser.LanguageFactory;
 import com.questandglory.parser.antlr.visitors.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 public class AntlrLanguageFactory implements LanguageFactory {
 
-    private final GameState gameState;
+    private final VariablesDefinition variables;
 
-    public AntlrLanguageFactory(GameState gameState) {
-        this.gameState = gameState;
+    public AntlrLanguageFactory(VariablesDefinition variables) {
+        this.variables = variables;
     }
 
     public Identifier identifier(LanguageParser.IdentifierContext ctx) {
@@ -120,7 +120,7 @@ public class AntlrLanguageFactory implements LanguageFactory {
     }
 
     protected <T extends AbstractLanguageVisitor<?>> T setup(T visitor) {
-        visitor.setGameState(gameState);
+        visitor.setVariables(variables);
         visitor.setFactory(this);
         return visitor;
     }

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,10 +59,20 @@ public class GameEngineServiceImpl implements GameEngineService {
 
     @Override
     public GameEngine findGameEngine(String gamePlayId) {
+        Assert.hasText(gamePlayId, "Game play ID cannot be null or empty.");
+
         GameEngine engine = enginesMap.get(gamePlayId);
         if (engine == null) {
-            throw new IllegalStateException("No game engine found for ID: " + gamePlayId);
+            throw new UnknownGamePlayException("No game engine found for ID: " + gamePlayId);
         }
+
         return engine;
+    }
+
+    @Override
+    public void setLanguage(String gamePlayId, Language language) {
+        GameEngine engine = findGameEngine(gamePlayId);
+        engine.setLanguage(language);
+        logger.info("Language for game play {} set to {}.", gamePlayId, language.displayNameEnglish());
     }
 }
